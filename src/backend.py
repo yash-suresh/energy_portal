@@ -8,7 +8,7 @@ from car import (
     LOOKAHEAD_HOURS,
     OVERRIDE_DURATION,
     PERIOD,
-    SCHEDULE_START,
+    NIGHT_SCHEDULE_START,
     MockCar,
 )
 from models import ChargerState, CombinedState, DemoAdminState
@@ -17,6 +17,9 @@ _car = MockCar()
 
 
 def init_session_state() -> None:
+    '''
+    initialisies the state of the car
+    '''
     if "override_start_time" not in st.session_state:
         st.session_state.override_start_time = None
     if "schedule_disabled_until" not in st.session_state:
@@ -54,7 +57,7 @@ def _is_charging_at(
 def _next_schedule_start(current_time: datetime) -> datetime:
     """Return the next schedule start time after current_time."""
     candidate = current_time.replace(
-        hour=SCHEDULE_START.hour, minute=SCHEDULE_START.minute, second=0, microsecond=0
+        hour=NIGHT_SCHEDULE_START.hour, minute=NIGHT_SCHEDULE_START.minute, second=0, microsecond=0
     )
     if candidate <= current_time:
         candidate += timedelta(days=1)

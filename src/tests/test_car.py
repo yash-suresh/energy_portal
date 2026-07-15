@@ -8,8 +8,8 @@ from car import (
     LOOKAHEAD_HOURS,
     OVERRIDE_DURATION,
     PERIOD,
-    SCHEDULE_END,
-    SCHEDULE_START,
+    NIGHT_SCHEDULE_END,
+    NIGHT_SCHEDULE_START,
     MockCar,
 )
 
@@ -21,8 +21,8 @@ def _dt(h, m=0):
 # --- Constants ---
 
 def test_constants():
-    assert SCHEDULE_START == time(2, 0)
-    assert SCHEDULE_END == time(5, 0)
+    assert NIGHT_SCHEDULE_START == time(2, 0)
+    assert NIGHT_SCHEDULE_END == time(5, 0)
     assert OVERRIDE_DURATION == timedelta(minutes=60)
     assert CHARGE_RATE_PER_30MIN == pytest.approx(0.05)
     assert INITIAL_SOC == pytest.approx(0.60)

@@ -1,7 +1,7 @@
 import streamlit as st
 
 import backend
-from car import INITIAL_SOC, SCHEDULE_END, SCHEDULE_START
+from car import INITIAL_SOC, NIGHT_SCHEDULE_END, NIGHT_SCHEDULE_START
 from models import ChargerState, CombinedState, DemoAdminState
 from plotting import plot_upcoming_charges
 from utils import get_current_time_to_nearest_30_minutes
@@ -30,9 +30,9 @@ def _projected_end_soc(future_states: list[CombinedState]) -> float:
     """SoC at the end of the next scheduled charge window."""
     for i, s in enumerate(future_states):
         t = s.time.time()
-        if t == SCHEDULE_END:
+        if t == NIGHT_SCHEDULE_END:
             return s.state_of_charge
-        if i > 0 and t > SCHEDULE_END and future_states[i - 1].time.time() < SCHEDULE_END:
+        if i > 0 and t > NIGHT_SCHEDULE_END and future_states[i - 1].time.time() < NIGHT_SCHEDULE_END:
             return s.state_of_charge
     return INITIAL_SOC
 
@@ -57,9 +57,9 @@ def show_status(
         connection_label = "Connected"
         status_label = "Idle"
 
-    schedule_end_label = SCHEDULE_END.strftime("%I%p").lstrip("0").lower()
+    schedule_end_label = NIGHT_SCHEDULE_END.strftime("%I%p").lstrip("0").lower()
     window_label = (
-        f"{SCHEDULE_START.strftime('%H:%M')} – {SCHEDULE_END.strftime('%H:%M')}"
+        f"{NIGHT_SCHEDULE_START.strftime('%H:%M')} – {NIGHT_SCHEDULE_END.strftime('%H:%M')}"
     )
 
     col1, col2, col3, col4 = st.columns(4)

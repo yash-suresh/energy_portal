@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from datetime import time, timedelta
 
-SCHEDULE_START = time(2, 0)
-SCHEDULE_END = time(5, 0)
+NIGHT_SCHEDULE_START = time(2, 0)
+NIGHT_SCHEDULE_END = time(5, 0)
+MIDDAY_SCHEDULE_START = time(13,0)
+MIDDAY_SCHEDULE_END = time(14,0)
 OVERRIDE_DURATION = timedelta(minutes=60)
 CHARGE_RATE_PER_30MIN = 0.05  # +5% SoC per 30-min slot (~10%/hr, typical Level 2 home charger)
 LOOKAHEAD_HOURS = 24
@@ -26,4 +28,7 @@ class MockCar:
         return self.initial_soc
 
     def is_in_schedule_window(self, t) -> bool:
-        return SCHEDULE_START <= t.time() < SCHEDULE_END
+        return (
+            NIGHT_SCHEDULE_START <= t.time() < NIGHT_SCHEDULE_END 
+            or MIDDAY_SCHEDULE_START <= t.time() < MIDDAY_SCHEDULE_END
+        )
