@@ -1,7 +1,7 @@
 import streamlit as st
 
 import backend
-from car import INITIAL_SOC, NIGHT_SCHEDULE_END, NIGHT_SCHEDULE_START
+from car import INITIAL_SOC, NIGHT_SCHEDULE_END, NIGHT_SCHEDULE_START, MIDDAY_SCHEDULE_START, MIDDAY_SCHEDULE_END
 from models import ChargerState, CombinedState, DemoAdminState
 from plotting import plot_upcoming_charges
 from utils import get_current_time_to_nearest_30_minutes
@@ -61,6 +61,9 @@ def show_status(
     window_label = (
         f"{NIGHT_SCHEDULE_START.strftime('%H:%M')} – {NIGHT_SCHEDULE_END.strftime('%H:%M')}"
     )
+    second_label = (
+        f"{MIDDAY_SCHEDULE_START.strftime('%H:%M')} – {MIDDAY_SCHEDULE_END.strftime('%H:%M')}"
+    )
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Current Battery", f"{INITIAL_SOC:.0%}")
@@ -68,7 +71,7 @@ def show_status(
     col3.metric("Connection", connection_label)
     col4.metric("Status", status_label)
 
-    st.info(f"Scheduled charging window: {window_label} daily")
+    st.info(f"Scheduled charging window: {window_label} and {second_label} daily")
 
 
 def controls(car_is_plugged_in: bool, car_is_charging: bool, charge_is_override: bool):
