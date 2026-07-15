@@ -5,7 +5,6 @@ import plotly.express as px
 from plotly.graph_objs import Figure
 
 from models import CombinedState
-from utils import get_current_time_to_nearest_30_minutes
 
 # These set the resampling period for graphing
 PERIOD = timedelta(minutes=30)
@@ -14,23 +13,21 @@ PERIOD_STR = "30min"
 
 def _convert_states_to_dataframe(states: list[CombinedState]) -> pd.DataFrame:
     """Convert to dataframe for ease of plotting with Plotly, and resample to 30mins"""
-    # TODO: Replace this with your logic - it should take the list of CombinedState objects and return a DataFrame
-    rounded_time = get_current_time_to_nearest_30_minutes()
-
-    times = [rounded_time + i * PERIOD for i in range(9)]
-    socs = [0.5, 0.55, 0.6, 0.6, 0.6, 0.65, 0.7, 0.75, 0.8]
-    car_is_charging = [True, True, False, False, True, True, True, True, False]
-    charge_is_override = [True, True, False, False, False, False, False, False, False]
-
+    if not states:
+        return pd.DataFrame(
+            columns=["Time", "State of Charge", "Car is Charging", "Charge is Override"]
+        )
     df = pd.DataFrame(
-        {
-            "Time": times,
-            "State of Charge": socs,
-            "Car is Charging": car_is_charging,
-            "Charge is Override": charge_is_override,
-        }
+        [
+            {
+                "Time": s.time,
+                "State of Charge": s.state_of_charge,
+                "Car is Charging": s.charger_state.car_is_charging,
+                "Charge is Override": s.charger_state.charge_is_override,
+            }
+            for s in states
+        ]
     )
-
     return df.reset_index()
 
 

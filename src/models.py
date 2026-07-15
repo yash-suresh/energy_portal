@@ -24,3 +24,4 @@ class CombinedState:
 
     time: datetime
     charger_state: ChargerState
+    state_of_charge: float = 0.0
